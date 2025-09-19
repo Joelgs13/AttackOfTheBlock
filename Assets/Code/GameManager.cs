@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
         Debug.Log("Has perdido el juego!");
 
+        FindFirstObjectByType<ScoreManager>().GameOver();
         // Opciones de fin de juego:
         // 1. Cerrar aplicación
         // Application.Quit();
