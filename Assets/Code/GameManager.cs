@@ -13,13 +13,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Has perdido el juego!");
 
         FindFirstObjectByType<ScoreManager>().GameOver();
-        // Opciones de fin de juego:
-        // 1. Cerrar aplicación
-        // Application.Quit();
-
-        // 2. Recargar escena (reiniciar juego)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-        // 3. O mostrar una UI de "Game Over" (Canvas con un panel)
+        FindFirstObjectByType<GameOverUI>().ShowGameOver();
     }
 }
