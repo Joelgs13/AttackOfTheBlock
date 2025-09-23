@@ -1,40 +1,59 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Necesario para Mouse.current
+using UnityEngine.InputSystem; // Required for Mouse.current
 
+/*
+* This script controls the player movement. 
+* The player follows the mouse position on the screen, 
+* while respecting collisions with invisible walls and enemies. 
+*/
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerFollowMouse : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float moveSpeed = 10f; // Speed at which the player moves toward the mouse
 
-    private Rigidbody2D rb;
-    private Vector3 targetPosition;
+    private Rigidbody2D rb;            // Reference to the Rigidbody2D for physics-based movement
+    private Vector3 targetPosition;    // Target position in world space based on the mouse
 
     void Awake()
     {
-        // Obtenemos la referencia al Rigidbody2D del jugador
+        // Get a reference to the player's Rigidbody2D component
         rb = GetComponent<Rigidbody2D>();
 
-        // Configuración básica del Rigidbody2D para movimiento 2D libre
-        rb.gravityScale = 0;                 // Sin gravedad
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; // Mejor detección
-        rb.freezeRotation = true;            // No queremos que rote al chocar
+        // Basic Rigidbody2D setup for smooth 2D movement
+        rb.gravityScale = 0;                 // Disable gravity (no falling in 2D plane)
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; // Better collision detection at high speeds
+        rb.freezeRotation = true;            // Prevent unwanted rotation when colliding
     }
 
+    /*
+    * Update is called once per frame.
+    * Reads the current mouse position and converts it to world coordinates
+    * so the player knows where to move.
+    */
     void Update()
     {
-        // Leer la posición del ratón con el nuevo Input System
+        // Get the current mouse position in screen coordinates
         Vector3 mousePos = Mouse.current.position.ReadValue();
+
+        // Convert mouse position to world space
         targetPosition = Camera.main.ScreenToWorldPoint(mousePos);
-        targetPosition.z = 0f;
+        targetPosition.z = 0f; // Ensure Z = 0 to stay in 2D plane
     }
 
+    /*
+    * FixedUpdate is used for physics-based movement.
+    * Moves the Rigidbody2D smoothly towards the target position,
+    * respecting collisions with walls or enemies.
+    */
     void FixedUpdate()
     {
-        // Mover al jugador usando Rigidbody2D (respetará colisiones con muros)
         rb.MovePosition(Vector2.MoveTowards(transform.position, targetPosition, moveSpeed * Time.fixedDeltaTime));
     }
 
-    // Detecta colisión con un enemigo
+    /*
+    * Called when the player collides with another object.
+    * If the object has the "Enemy" tag, the game ends.
+    */
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
@@ -44,4 +63,3 @@ public class PlayerFollowMouse : MonoBehaviour
         }
     }
 }
-

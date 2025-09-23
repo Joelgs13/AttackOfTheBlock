@@ -4,15 +4,15 @@ public class EnemyBounce : MonoBehaviour
 {
     private Rigidbody2D rb;
 
-    [SerializeField] private float speed = 5f; // Velocidad inicial
+    [SerializeField] private float speed = 5f; // start speed
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // Dirección aleatoria inicial
+        // aleatory direction at start
         Vector2 randomDir = Random.insideUnitCircle.normalized;
         rb.linearVelocity = randomDir * speed;
     }
 
-    // Rebotes automáticos gracias al PhysicsMaterial2D
+    //NOTE: the PhisicMaterial2D makes the bounce automatically
 }

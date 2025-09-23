@@ -3,39 +3,43 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+* This script manages the Game Over screen.
+* It shows the Game Over panel and handles the Restart and Quit buttons.
+*/
 public class GameOverUI : MonoBehaviour
 {
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private Button restartButton;
-    [SerializeField] private Button quitButton;
+    [SerializeField] private GameObject gameOverPanel; // Panel that contains the Game Over UI
+    [SerializeField] private Button restartButton;     // Restart button reference
+    [SerializeField] private Button quitButton;        // Quit button reference
 
     void Awake()
     {
-        // Asegurarse que el panel está desactivado al inicio
+        // Ensure the panel is hidden at the start
         gameOverPanel.SetActive(false);
 
-        // Asignar eventos a los botones
+        // Assign button actions
         restartButton.onClick.AddListener(RestartGame);
         quitButton.onClick.AddListener(QuitGame);
     }
 
-    // Mostrar pantalla Game Over
+    // Show the Game Over screen
     public void ShowGameOver()
     {
         gameOverPanel.SetActive(true);
     }
 
-    // Reiniciar escena
+    // Reload the current scene
     void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // Salir del juego
+    // Quit the game (works in Editor and build)
     void QuitGame()
     {
         #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // Para salir en editor
+        UnityEditor.EditorApplication.isPlaying = false;
         #else
         Application.Quit();
         #endif
