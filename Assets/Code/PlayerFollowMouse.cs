@@ -20,9 +20,9 @@ public class PlayerFollowMouse : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         // Basic Rigidbody2D setup for smooth 2D movement
-        rb.gravityScale = 0;                 // Disable gravity (no falling in 2D plane)
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; // Better collision detection at high speeds
-        rb.freezeRotation = true;            // Prevent unwanted rotation when colliding
+        rb.gravityScale = 0;                 
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; 
+        rb.freezeRotation = true;            
     }
 
     /*
@@ -37,7 +37,7 @@ public class PlayerFollowMouse : MonoBehaviour
 
         // Convert mouse position to world space
         targetPosition = Camera.main.ScreenToWorldPoint(mousePos);
-        targetPosition.z = 0f; // Ensure Z = 0 to stay in 2D plane
+        targetPosition.z = 0f; 
     }
 
     /*

@@ -9,6 +9,7 @@ public class EnemyBounce : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         // aleatory direction at start
         Vector2 randomDir = Random.insideUnitCircle.normalized;
         rb.linearVelocity = randomDir * speed;

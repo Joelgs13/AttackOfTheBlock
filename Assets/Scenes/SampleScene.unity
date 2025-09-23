@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &36442923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -689,6 +689,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy 1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3895576452406748823, guid: 8db19613d6afb634ebde9b78cbe2ead9, type: 3}
+      propertyPath: speed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4479513159160923243, guid: 8db19613d6afb634ebde9b78cbe2ead9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.84
@@ -1127,6 +1131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3895576452406748823, guid: 8db19613d6afb634ebde9b78cbe2ead9, type: 3}
+      propertyPath: speed
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 4479513159160923243, guid: 8db19613d6afb634ebde9b78cbe2ead9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.29
@@ -1403,9 +1411,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0, g: 0.116708755, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.91371536, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1442,7 +1450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be823793ce5a6c0488d1698af5faa66d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerFollowMouse
-  moveSpeed: 10
+  moveSpeed: 30
 --- !u!1 &1319224152
 GameObject:
   m_ObjectHideFlags: 0
@@ -2236,7 +2244,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 8
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
