@@ -10,6 +10,11 @@ public class EnemyBounce : MonoBehaviour
 
     [SerializeField] private float speed = 5f; // initial speed
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.bounceClip);
+    }
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();

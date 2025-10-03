@@ -9,6 +9,11 @@ public class GameManager : MonoBehaviour
 {
     private bool isGameOver = false; // Prevents multiple game over calls
 
+    void Start()
+    {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.startClip);
+    }
+    
     // Called when the player loses
     public void GameOver()
     {
@@ -16,6 +21,7 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
 
         Debug.Log("Game Over!");
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.gameOverClip);
 
         // Notify other systems
         FindFirstObjectByType<ScoreManager>().GameOver();
