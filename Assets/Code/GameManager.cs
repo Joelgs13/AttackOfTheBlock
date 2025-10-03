@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Game start");
         AudioManager.Instance.PlaySFX(AudioManager.Instance.startClip);
     }
     
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Game Over!");
         AudioManager.Instance.PlaySFX(AudioManager.Instance.gameOverClip);
-
+        Debug.Log("Game over sound");
         // Notify other systems
         FindFirstObjectByType<ScoreManager>().GameOver();
         FindFirstObjectByType<GameOverUI>().ShowGameOver();

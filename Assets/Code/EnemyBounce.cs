@@ -12,6 +12,7 @@ public class EnemyBounce : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("bump");
         AudioManager.Instance.PlaySFX(AudioManager.Instance.bounceClip);
     }
     

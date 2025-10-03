@@ -59,6 +59,7 @@ public class PlayerFollowMouse : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip);
+            Debug.Log("Player hit");
             Debug.Log("GAME OVER!");
             FindFirstObjectByType<GameManager>().GameOver();
         }
