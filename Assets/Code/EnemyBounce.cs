@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /*
@@ -9,6 +10,7 @@ public class EnemyBounce : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     [SerializeField] private float speed = 5f; // initial speed
+    private float originalSpeed;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -40,6 +42,22 @@ public class EnemyBounce : MonoBehaviour
             spriteRenderer.flipX = true;  // facing left
         }
     }
+
+    public IEnumerator ReduceSpeedTemporarily(float multiplier, float duration)
+    {
+        // Guardamos la dirección actual antes de reducir
+        Vector2 currentDir = rb.linearVelocity.normalized;
+
+        // Reducir velocidad actual (manteniendo dirección)
+        rb.linearVelocity = currentDir * (speed * multiplier);
+
+        yield return new WaitForSeconds(duration);
+
+        // Restaurar con el doble de la velocidad original (no la reducida)
+        currentDir = rb.linearVelocity.normalized;
+        rb.linearVelocity = currentDir * (speed * 2f);
+    }
+
 
     // NOTE: PhysicsMaterial2D handles the bounce automatically
 }
