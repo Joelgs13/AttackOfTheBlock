@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false; //Doesn't show cursor
         Debug.Log("Game start");
         AudioManager.Instance.PlaySFX(AudioManager.Instance.startClip);
     }
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
 
         Debug.Log("Game Over!");
+        Cursor.visible = true;
         AudioManager.Instance.PlaySFX(AudioManager.Instance.gameOverClip);
         Debug.Log("Game over sound");
         // Notify other systems

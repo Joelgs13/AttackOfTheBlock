@@ -8,7 +8,7 @@ public class PowerUp : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             // Reducir velocidad de todos los enemigos
-            EnemyBounce[] enemies = FindObjectsOfType<EnemyBounce>();
+            EnemyBounce[] enemies = FindObjectsByType<EnemyBounce>(FindObjectsSortMode.None);
             foreach (EnemyBounce enemy in enemies)
             {
                 enemy.StartCoroutine(enemy.ReduceSpeedTemporarily(0.5f, 5f));

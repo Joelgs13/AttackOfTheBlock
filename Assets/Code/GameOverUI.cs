@@ -15,6 +15,7 @@ public class GameOverUI : MonoBehaviour
 
     void Awake()
     {
+        
         // Ensure the panel is hidden at the start
         gameOverPanel.SetActive(false);
 

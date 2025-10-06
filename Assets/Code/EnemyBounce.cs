@@ -10,6 +10,8 @@ public class EnemyBounce : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     [SerializeField] private float speed = 5f; // initial speed
+    [SerializeField] private float maxSpeed = 100f; // Velocidad máxima
+
     private float originalSpeed;
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -41,6 +43,11 @@ public class EnemyBounce : MonoBehaviour
         {
             spriteRenderer.flipX = true;  // facing left
         }
+        //vel controller
+        if (rb.linearVelocity.magnitude > maxSpeed)
+        {
+            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+        }
     }
 
     public IEnumerator ReduceSpeedTemporarily(float multiplier, float duration)
@@ -57,6 +64,41 @@ public class EnemyBounce : MonoBehaviour
         currentDir = rb.linearVelocity.normalized;
         rb.linearVelocity = currentDir * (speed * 2f);
     }
+    void LateUpdate()
+    {
+        // Obtener límites de cámara en coordenadas del mundo
+        Vector2 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
+        Vector3 pos = transform.position;
+
+        // Limitar X
+        if (pos.x > screenBounds.x)
+        {
+            pos.x = screenBounds.x;
+            rb.linearVelocity = new Vector2(-Mathf.Abs(rb.linearVelocity.x), rb.linearVelocity.y);
+        }
+        else if (pos.x < -screenBounds.x)
+        {
+            pos.x = -screenBounds.x;
+            rb.linearVelocity = new Vector2(Mathf.Abs(rb.linearVelocity.x), rb.linearVelocity.y);
+        }
+
+        // Limitar Y
+        if (pos.y > screenBounds.y)
+        {
+            pos.y = screenBounds.y;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -Mathf.Abs(rb.linearVelocity.y));
+        }
+        else if (pos.y < -screenBounds.y)
+        {
+            pos.y = -screenBounds.y;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Abs(rb.linearVelocity.y));
+        }
+
+        transform.position = pos;
+    }
+
+    
 
 
     // NOTE: PhysicsMaterial2D handles the bounce automatically
