@@ -10,7 +10,7 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] private Sprite[] hurtSprites;
     [SerializeField] private Sprite[] deadSprites;
 
-    [SerializeField] private float frameRate = 0.1f; // tiempo entre frames
+    [SerializeField] private float frameRate = 0.1f; // Time between frames
     private Coroutine currentAnimation;
     private bool isDead = false;
 
@@ -31,7 +31,7 @@ public class PlayerAnimation : MonoBehaviour
         if (currentAnimation != null)
             StopCoroutine(currentAnimation);
 
-        currentAnimation = StartCoroutine(PlayAnimationLoop(idleSprites));
+        currentAnimation = StartCoroutine(PlayAnimationLoop(idleSprites)); //Plays the idle animation 
     }
 
     public void PlayHurt()
@@ -41,7 +41,7 @@ public class PlayerAnimation : MonoBehaviour
         if (currentAnimation != null)
             StopCoroutine(currentAnimation);
 
-        currentAnimation = StartCoroutine(PlayHurtAnimation());
+        currentAnimation = StartCoroutine(PlayHurtAnimation()); //Plays the hurt animation 
     }
 
     public void PlayDead()
@@ -52,7 +52,7 @@ public class PlayerAnimation : MonoBehaviour
         if (currentAnimation != null)
             StopCoroutine(currentAnimation);
 
-        currentAnimation = StartCoroutine(PlayAnimationOnce(deadSprites, null));
+        currentAnimation = StartCoroutine(PlayAnimationOnce(deadSprites, null)); //Plays the death animation 
     }
 
     private IEnumerator PlayAnimationLoop(Sprite[] frames)
@@ -78,7 +78,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private IEnumerator PlayHurtAnimation()
     {
-        // reproducir Hurt tres veces
+        // hurt is 3 times.
         for (int repeat = 0; repeat < 3; repeat++)
         {
             for (int i = 0; i < hurtSprites.Length; i++)

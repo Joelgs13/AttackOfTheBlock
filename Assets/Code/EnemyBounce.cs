@@ -16,7 +16,7 @@ public class EnemyBounce : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("bump");
+        //Debug.Log("bump");
         AudioManager.Instance.PlaySFX(AudioManager.Instance.bounceClip);
     }
     
@@ -52,26 +52,26 @@ public class EnemyBounce : MonoBehaviour
 
     public IEnumerator ReduceSpeedTemporarily(float multiplier, float duration)
     {
-        // Guardamos la dirección actual antes de reducir
+        // Save the info before reduction
         Vector2 currentDir = rb.linearVelocity.normalized;
 
-        // Reducir velocidad actual (manteniendo dirección)
+        // Reduce the actual movement speed
         rb.linearVelocity = currentDir * (speed * multiplier);
 
         yield return new WaitForSeconds(duration);
 
-        // Restaurar con el doble de la velocidad original (no la reducida)
+        // bring back the speed to the value assigned before
         currentDir = rb.linearVelocity.normalized;
         rb.linearVelocity = currentDir * (speed * 2f);
     }
     void LateUpdate()
     {
-        // Obtener límites de cámara en coordenadas del mundo
+        // Camera limits on world
         Vector2 screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
         Vector3 pos = transform.position;
 
-        // Limitar X
+        // Limit X
         if (pos.x > screenBounds.x)
         {
             pos.x = screenBounds.x;
@@ -83,7 +83,7 @@ public class EnemyBounce : MonoBehaviour
             rb.linearVelocity = new Vector2(Mathf.Abs(rb.linearVelocity.x), rb.linearVelocity.y);
         }
 
-        // Limitar Y
+        // Limit Y
         if (pos.y > screenBounds.y)
         {
             pos.y = screenBounds.y;

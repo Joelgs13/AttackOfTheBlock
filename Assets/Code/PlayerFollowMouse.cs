@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Required for Mouse.current
+using UnityEngine.InputSystem; 
 
 /*
 * Controls player movement, life system and temporary invulnerability.

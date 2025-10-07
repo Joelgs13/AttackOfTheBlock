@@ -7,17 +7,17 @@ public class PowerUp : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            // Reducir velocidad de todos los enemigos
+            // Reduce all enemies Vel
             EnemyBounce[] enemies = FindObjectsByType<EnemyBounce>(FindObjectsSortMode.None);
             foreach (EnemyBounce enemy in enemies)
             {
                 enemy.StartCoroutine(enemy.ReduceSpeedTemporarily(0.5f, 5f));
             }
 
-            // Avisar al spawner de que el efecto sigue activo
+            // Call spawner so it knows the effect is still lasting
             FindFirstObjectByType<PowerUpSpawner>().StartCoroutine(EffectCooldown(5f));
 
-            // Destruir power-up recogido
+            // Destroy Power-up
             Destroy(gameObject);
         }
     }
