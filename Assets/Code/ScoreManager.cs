@@ -28,16 +28,20 @@ public class ScoreManager : MonoBehaviour
     {
         isGameOver = true;
 
-        // saves only if current mark bypasses the current best
+        // Guardar la puntuación actual en el ranking
+        ScoreData.SaveScore(currentTime);
+
+        // Guardar mejor tiempo si supera al actual
         if (currentTime > bestTime)
         {
             bestTime = currentTime;
             PlayerPrefs.SetFloat("BestTime", bestTime);
-            PlayerPrefs.Save(); // this saves on current player mark
+            PlayerPrefs.Save();
         }
 
-        UpdateScoreText(); // Updates final text
+        UpdateScoreText();
     }
+
 
 
     /*
