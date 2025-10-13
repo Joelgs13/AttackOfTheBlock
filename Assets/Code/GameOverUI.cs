@@ -2,44 +2,49 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/*
- * Handles the Game Over UI: restart or go back to main menu.
- */
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private Button restartButton;
     [SerializeField] private Button menuButton;
 
+    private bool gameOverActive = false;
+
     void Awake()
     {
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
 
-        if (restartButton != null)
-            restartButton.onClick.AddListener(RestartGame);
-
-        if (menuButton != null)
-            menuButton.onClick.AddListener(ReturnToMenu);
+        restartButton.onClick.AddListener(RestartGame);
+        menuButton.onClick.AddListener(ReturnToMenu);
     }
 
     public void ShowGameOver()
     {
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(true);
+        gameOverPanel.SetActive(true);
+        gameOverActive = true;
 
-        Time.timeScale = 0f; // Pausa el juego mientras se muestra el menú
+        Time.timeScale = 0f;
+
+        // Mostrar cursor al morir
+        Cursor.visible = true;
     }
 
-    private void RestartGame()
+    public bool IsGameOverActive()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("GameScene");
+        return gameOverActive;
     }
 
-    private void ReturnToMenu()
+    void RestartGame()
     {
         Time.timeScale = 1f;
+        Cursor.visible = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void ReturnToMenu()
+    {
+        Time.timeScale = 1f;
+        Cursor.visible = true;
         SceneManager.LoadScene("MainMenu");
     }
 }

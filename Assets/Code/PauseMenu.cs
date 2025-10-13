@@ -1,38 +1,36 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
-/*
- * Handles the Pause Menu: pausing, resuming, or returning to the main menu.
- */
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private Button resumeButton;
-    [SerializeField] private Button menuButton;
-
     private bool isPaused = false;
 
-    void Awake()
+    void Start()
     {
         if (pausePanel != null)
             pausePanel.SetActive(false);
 
-        if (resumeButton != null)
-            resumeButton.onClick.AddListener(ResumeGame);
+        Time.timeScale = 1f;
+        isPaused = false;
 
-        if (menuButton != null)
-            menuButton.onClick.AddListener(ReturnToMenu);
+        Cursor.visible = false;
     }
 
     void Update()
     {
-        // Detectar tecla Escape con el nuevo sistema de Input
+        // No permitir pausar si hay GameOver activo
+        GameOverUI gameOver = FindFirstObjectByType<GameOverUI>();
+        if (gameOver != null && gameOver.IsGameOverActive())
+            return;
+
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (isPaused) ResumeGame();
-            else PauseGame();
+            if (isPaused)
+                ResumeGame();
+            else
+                PauseGame();
         }
     }
 
@@ -43,6 +41,10 @@ public class PauseMenu : MonoBehaviour
 
         Time.timeScale = 0f;
         isPaused = true;
+
+        // Mostrar el cursor durante la pausa
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void ResumeGame()
@@ -52,11 +54,15 @@ public class PauseMenu : MonoBehaviour
 
         Time.timeScale = 1f;
         isPaused = false;
+
+        // Ocultar el cursor al volver a jugar
+        Cursor.visible = false;
     }
 
-    private void ReturnToMenu()
+    public void ReturnToMenu()
     {
         Time.timeScale = 1f;
+        Cursor.visible = true;
         SceneManager.LoadScene("MainMenu");
     }
 }
