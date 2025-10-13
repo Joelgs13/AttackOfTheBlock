@@ -1614,7 +1614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &801529153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1711,8 +1711,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   pausePanel: {fileID: 1597092737}
-  resumeButton: {fileID: 0}
-  menuButton: {fileID: 0}
 --- !u!1001 &803821378
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2568,8 +2566,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   pausePanel: {fileID: 1597092737}
-  resumeButton: {fileID: 853814879}
-  menuButton: {fileID: 1315726781}
 --- !u!4 &1486031445
 Transform:
   m_ObjectHideFlags: 0
@@ -3370,8 +3366,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1
-  m_fontSizeBase: 1
+  m_fontSize: 0.5
+  m_fontSizeBase: 0.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3579,7 +3575,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2140329797
 MonoBehaviour:
   m_ObjectHideFlags: 0

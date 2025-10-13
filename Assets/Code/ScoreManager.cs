@@ -1,54 +1,24 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
-/*
-* Este script basa su funcionalidad en contabilizar la puntuación del jugador. 
-* sirve para controlar como se actualiza la puntuacion en los diferentes momentos del juego
-*/
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
 
-    private float currentTime = 0f; //current points
-    private float bestTime = 0f;//the best mark
-    private bool isGameOver = false;//checks if game finished
+    private float currentTime = 0f;
+    private bool isGameOver = false;
+
+    private List<float> topScores = new List<float>(); // ranking
+    private int nextTargetIndex = 0; // índice del TOP actual a superar
+
+    private readonly string[] topNames = { "TOP 5", "TOP 4", "TOP 3", "TOP 2", "MEJOR MARCA" };
 
     void Start()
     {
-        // Chargest the best time at the start of the game
-        bestTime = PlayerPrefs.GetFloat("BestTime", 0f);
-        UpdateScoreText();
+        ResetTopScores();
     }
 
-    /*
-    * method that is called at the end of the game, so it can 
-    * SAVE the time, check if its better that the current best mark and save it. also updates the current mark
-    */
-    public void GameOver()
-    {
-        isGameOver = true;
-
-        // Guardar la puntuación actual en el ranking
-        ScoreData.SaveScore(currentTime);
-
-        // Guardar mejor tiempo si supera al actual
-        if (currentTime > bestTime)
-        {
-            bestTime = currentTime;
-            PlayerPrefs.SetFloat("BestTime", bestTime);
-            PlayerPrefs.Save();
-        }
-
-        UpdateScoreText();
-    }
-
-
-
-    /*
-    * Update is called once per frame.
-    * If the game is not over, the timer (score) increases 
-    * and the UI is updated to reflect the current time.
-    */
     void Update()
     {
         if (!isGameOver)
@@ -58,33 +28,66 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    /*
-    * Converts both the current time and the best time into
-    * minutes:seconds:milliseconds format, then updates the UI text.
-    */
+    void ResetTopScores()
+    {
+        // Cargar ranking y ordenar de menor a mayor para mostrar TOP 5 primero
+        topScores = new List<float>(ScoreData.Load().scores);
+        topScores.Sort(); // menor tiempo = TOP más bajo
+        while (topScores.Count < 5) topScores.Insert(0, float.MaxValue); // rellena hasta 5 para evitar errores
+        nextTargetIndex = 0; // comenzamos con TOP 5
+    }
+
     void UpdateScoreText()
     {
-        // Convert current time
         int minutes = Mathf.FloorToInt(currentTime / 60);
         int seconds = Mathf.FloorToInt(currentTime % 60);
         int milliseconds = Mathf.FloorToInt((currentTime * 1000) % 1000);
 
-        // Convert best time
-        int bestMinutes = Mathf.FloorToInt(bestTime / 60);
-        int bestSeconds = Mathf.FloorToInt(bestTime % 60);
-        int bestMilliseconds = Mathf.FloorToInt((bestTime * 1000) % 1000);
+        string currentStr = $"Tiempo actual: {minutes:00}:{seconds:00}:{milliseconds:000}";
 
-        // Update the UI text with formatted values
-        scoreText.text = $"Tiempo: {minutes:00}:{seconds:00}:{milliseconds:000}   Mejor: {bestMinutes:00}:{bestSeconds:00}:{bestMilliseconds:000}";
+        // Si ya superaste todos los TOP, solo mostramos tu tiempo
+        if (nextTargetIndex >= topScores.Count)
+        {
+            scoreText.text = currentStr;
+            return;
+        }
+
+        float targetScore = topScores[nextTargetIndex];
+
+        // Si superaste la marca actual, pasamos a la siguiente
+        if (currentTime > targetScore)
+        {
+            nextTargetIndex++;
+            if (nextTargetIndex >= topScores.Count)
+            {
+                scoreText.text = currentStr;
+                return;
+            }
+            targetScore = topScores[nextTargetIndex];
+        }
+
+        // Mostrar el TOP correspondiente
+        int tMin = Mathf.FloorToInt(targetScore / 60);
+        int tSec = Mathf.FloorToInt(targetScore % 60);
+        int tMs = Mathf.FloorToInt((targetScore * 1000) % 1000);
+
+        string topName = nextTargetIndex < topNames.Length ? topNames[nextTargetIndex] : "TOP";
+
+        scoreText.text = currentStr + $"\t{topName}: {tMin:00}:{tSec:00}:{tMs:000}";
     }
 
-    /*
-    * Resets the score when starting a new game.
-    * Sets the current time back to zero and reactivates score counting.
-    */
+    public void GameOver()
+    {
+        isGameOver = true;
+        ScoreData.SaveScore(currentTime);
+        ResetTopScores(); // recarga ranking
+        UpdateScoreText();
+    }
+
     public void ResetScore()
     {
         currentTime = 0f;
         isGameOver = false;
+        ResetTopScores();
     }
 }
