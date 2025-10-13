@@ -1,21 +1,45 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
+/*
+ * Handles the Main Menu functionality: starting the game or quitting.
+ * Also ensures the mouse cursor is visible when in the menu.
+ */
 public class MainMenuManager : MonoBehaviour
 {
-    // Llamado por el botón "Iniciar Juego"
-    public void StartGame()
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button quitButton;
+
+    void Awake()
     {
-        SceneManager.LoadScene("GameScene"); // Asegúrate de que el nombre coincide
+        // Mostrar el cursor al estar en el menú
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        // Asignar eventos a los botones
+        if (startButton != null)
+            startButton.onClick.AddListener(StartGame);
+
+        if (quitButton != null)
+            quitButton.onClick.AddListener(QuitGame);
     }
 
-    // Llamado por el botón "Salir"
-    public void QuitGame()
+    private void StartGame()
+    {
+        // Ocultar el cursor al iniciar el juego
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        SceneManager.LoadScene("GameScene");
+    }
+
+    private void QuitGame()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // Cierra en editor
+        UnityEditor.EditorApplication.isPlaying = false; // Solo en editor
 #else
-        Application.Quit(); // Cierra el ejecutable
+        Application.Quit(); // En el ejecutable
 #endif
     }
 }

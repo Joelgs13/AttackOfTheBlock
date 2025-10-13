@@ -1,48 +1,45 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
 /*
-* This script manages the Game Over screen.
-* It shows the Game Over panel and handles the Restart and Quit buttons.
-*/
+ * Handles the Game Over UI: restart or go back to main menu.
+ */
 public class GameOverUI : MonoBehaviour
 {
-    [SerializeField] private GameObject gameOverPanel; // Panel that contains the Game Over UI
-    [SerializeField] private Button restartButton;     // Restart button reference
-    [SerializeField] private Button quitButton;        // Quit button reference
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button menuButton;
 
     void Awake()
     {
-        
-        // Ensure the panel is hidden at the start
-        gameOverPanel.SetActive(false);
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
 
-        // Assign button actions
-        restartButton.onClick.AddListener(RestartGame);
-        quitButton.onClick.AddListener(QuitGame);
+        if (restartButton != null)
+            restartButton.onClick.AddListener(RestartGame);
+
+        if (menuButton != null)
+            menuButton.onClick.AddListener(ReturnToMenu);
     }
 
-    // Show the Game Over screen
     public void ShowGameOver()
     {
-        gameOverPanel.SetActive(true);
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(true);
+
+        Time.timeScale = 0f; // Pausa el juego mientras se muestra el menú
     }
 
-    // Reload the current scene
-    void RestartGame()
+    private void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("GameScene");
     }
 
-    // Quit the game (works in Editor and build)
-    void QuitGame()
+    private void ReturnToMenu()
     {
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #else
-        Application.Quit();
-        #endif
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 }
