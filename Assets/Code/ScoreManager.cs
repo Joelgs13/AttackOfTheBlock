@@ -12,7 +12,7 @@ public class ScoreManager : MonoBehaviour
     private List<float> topScores = new List<float>(); // ranking
     private int nextTargetIndex = 0; // índice del TOP actual a superar
 
-    private readonly string[] topNames = { "TOP 5", "TOP 4", "TOP 3", "TOP 2", "MEJOR MARCA" };
+    private readonly string[] topNames = { "TOP 5", "TOP 4", "TOP 3", "TOP 2", "BEST" };
 
     void Start()
     {
@@ -43,7 +43,7 @@ public class ScoreManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(currentTime % 60);
         int milliseconds = Mathf.FloorToInt((currentTime * 1000) % 1000);
 
-        string currentStr = $"Tiempo actual: {minutes:00}:{seconds:00}:{milliseconds:000}";
+        string currentStr = $"Tiempo: {minutes:00}:{seconds:00}:{milliseconds:000}\t";
 
         // Si ya superaste todos los TOP, solo mostramos tu tiempo
         if (nextTargetIndex >= topScores.Count)
