@@ -4,37 +4,47 @@ using System.Collections;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private float spawnInterval = 15f;
-    [SerializeField] private int maxEnemies = 12;
+    [SerializeField] private float spawnInterval = 15f; // Tiempo entre spawns
+    [SerializeField] private int maxEnemies = 20;
 
     private Camera cam;
 
     void Start()
     {
         cam = Camera.main;
+        TrySpawnEnemy();
         StartCoroutine(SpawnRoutine());
     }
 
-    IEnumerator SpawnRoutine()
+    private IEnumerator SpawnRoutine()
     {
         while (true)
         {
             yield return new WaitForSeconds(spawnInterval);
-
-            int count = FindObjectsByType<EnemyBounce>(FindObjectsSortMode.None).Length;
-            if (count >= maxEnemies) continue;
-
-            Vector3 pos = GetRandomPositionOnScreen();
-            Instantiate(enemyPrefab, pos, Quaternion.identity);
+            TrySpawnEnemy();
         }
     }
 
-    Vector3 GetRandomPositionOnScreen()
+    private void TrySpawnEnemy()
     {
-        float x = Random.Range(0.1f, 0.9f);
-        float y = Random.Range(0.1f, 0.9f);
-        Vector3 world = cam.ViewportToWorldPoint(new Vector3(x, y, 10));
-        world.z = 0f;
-        return world;
+        if (FindObjectsOfType<EnemyBounce>().Length >= maxEnemies)
+            return;
+
+        Vector2 spawnPos = GetRandomSpawnPosition();
+        EnemyBounce enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity).GetComponent<EnemyBounce>();
+
+        // Evitar daño al jugador durante 2 segundos
+        if (enemy != null)
+            enemy.DisableDamageTemporarily(2f);
+    }
+
+
+    private Vector2 GetRandomSpawnPosition()
+    {
+        Vector2 screenBounds = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        return new Vector2(
+            Random.Range(-screenBounds.x * 0.8f, screenBounds.x * 0.8f),
+            Random.Range(-screenBounds.y * 0.8f, screenBounds.y * 0.8f)
+        );
     }
 }

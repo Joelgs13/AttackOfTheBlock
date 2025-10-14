@@ -57,44 +57,40 @@ public class PlayerFollowMouse : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Solo actuamos si colisiona con un enemigo
-        if (!collision.gameObject.CompareTag("Enemy"))
-            return;
-
-        PlayerPowerup pp = GetComponent<PlayerPowerup>();
-
-        // Si tiene el power-up de "matar al siguiente enemigo"
-        if (pp != null && pp.ConsumeKillIfAvailable())
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyBounce enemy = collision.gameObject.GetComponent<EnemyBounce>();
-            if (enemy != null)
-                enemy.Kill();
+            if (enemy != null && !enemy.CanDamagePlayer())
+                return; // ignorar daño si el enemigo acaba de spawnear
 
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip); // puedes usar otro SFX si quieres
-            return; // evita recibir daño
-        }
+            PlayerPowerup pp = GetComponent<PlayerPowerup>();
+            if (pp != null && pp.ConsumeKillIfAvailable())
+            {
+                if (enemy != null) enemy.Kill();
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip); // SFX de matar
+                return; // no aplicar daño/vidas
+            }
 
-        // Si es invulnerable, ignora el golpe
-        if (isInvulnerable) return;
+            if (isInvulnerable) return; // tu lógica de invulnerabilidad temporal
 
-        // Lógica normal de daño
-        currentLives--;
-        Debug.Log($"Player hit! Lives remaining: {currentLives}");
+            currentLives--;
+            Debug.Log($"Player hit! Lives remaining: {currentLives}");
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip);
 
-        AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip);
-
-        if (currentLives > 0)
-        {
-            playerAnim.PlayHurt();
-            StartCoroutine(InvulnerabilityRoutine());
-        }
-        else
-        {
-            playerAnim.PlayDead();
-            Debug.Log("GAME OVER!");
-            FindFirstObjectByType<GameManager>().GameOver();
+            if (currentLives > 0)
+            {
+                playerAnim.PlayHurt();
+                StartCoroutine(InvulnerabilityRoutine());
+            }
+            else
+            {
+                playerAnim.PlayDead();
+                Debug.Log("GAME OVER!");
+                FindFirstObjectByType<GameManager>().GameOver();
+            }
         }
     }
+
 
 
     private System.Collections.IEnumerator InvulnerabilityRoutine()
