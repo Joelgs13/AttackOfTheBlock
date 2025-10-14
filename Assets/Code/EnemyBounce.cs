@@ -98,7 +98,11 @@ public class EnemyBounce : MonoBehaviour
         transform.position = pos;
     }
 
-    
+    public void Kill()
+    {
+        // Aquí puedes poner efectos o sonidos si quieres
+        Destroy(gameObject);
+    }
 
 
     // NOTE: PhysicsMaterial2D handles the bounce automatically

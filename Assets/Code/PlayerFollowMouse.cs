@@ -57,29 +57,45 @@ public class PlayerFollowMouse : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        // Solo actuamos si colisiona con un enemigo
+        if (!collision.gameObject.CompareTag("Enemy"))
+            return;
+
+        PlayerPowerup pp = GetComponent<PlayerPowerup>();
+
+        // Si tiene el power-up de "matar al siguiente enemigo"
+        if (pp != null && pp.ConsumeKillIfAvailable())
         {
-            if (isInvulnerable) return;
-            
+            EnemyBounce enemy = collision.gameObject.GetComponent<EnemyBounce>();
+            if (enemy != null)
+                enemy.Kill();
 
-            currentLives--;
-            Debug.Log($"Player hit! Lives remaining: {currentLives}");
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip); // puedes usar otro SFX si quieres
+            return; // evita recibir daño
+        }
 
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip);
+        // Si es invulnerable, ignora el golpe
+        if (isInvulnerable) return;
 
-            if (currentLives > 0)
-            {
-                playerAnim.PlayHurt();
-                StartCoroutine(InvulnerabilityRoutine());
-            }
-            else
-            {
-                playerAnim.PlayDead();
-                Debug.Log("GAME OVER!");
-                FindFirstObjectByType<GameManager>().GameOver();
-            }
+        // Lógica normal de daño
+        currentLives--;
+        Debug.Log($"Player hit! Lives remaining: {currentLives}");
+
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.hitClip);
+
+        if (currentLives > 0)
+        {
+            playerAnim.PlayHurt();
+            StartCoroutine(InvulnerabilityRoutine());
+        }
+        else
+        {
+            playerAnim.PlayDead();
+            Debug.Log("GAME OVER!");
+            FindFirstObjectByType<GameManager>().GameOver();
         }
     }
+
 
     private System.Collections.IEnumerator InvulnerabilityRoutine()
     {
