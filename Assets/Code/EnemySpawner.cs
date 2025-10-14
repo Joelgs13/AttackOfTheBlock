@@ -35,7 +35,7 @@ public class EnemySpawner : MonoBehaviour
 
         // Evitar daño al jugador durante 2 segundos
         if (enemy != null)
-            enemy.DisableDamageTemporarily(2f);
+            enemy.DisableDamageTemporarily(0.5f);
     }
 
 
